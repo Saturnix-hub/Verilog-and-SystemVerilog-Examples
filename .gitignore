@@ -1,0 +1,25 @@
+# ModelSim work library
+work/
+
+# ModelSim generated files
+*.mpf
+*.cr.mti
+transcript
+*.wlf
+*.qdb
+*.qpg
+*.qtl
+
+# Waveforms
+*.vcd
+
+# Backup files
+*.bak
+
+# Logs
+*.log
+tcl_stacktrace.txt
+
+# Windows
+Thumbs.db
+Desktop.ini
