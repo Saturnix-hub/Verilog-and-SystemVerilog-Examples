@@ -41,19 +41,13 @@ module dual_port_ram
         else
         begin
 
-            //----------------------------------
             // Port A
-            //----------------------------------
-
             if(we_a)
                 mem[addr_a] <= data_in_a;
             else if(re_a)
                 data_out_a <= mem[addr_a];
 
-            //----------------------------------
             // Port B
-            //----------------------------------
-
             if(we_b)
                 mem[addr_b] <= data_in_b;
             else if(re_b)
