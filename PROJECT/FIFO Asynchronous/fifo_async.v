@@ -111,9 +111,9 @@ module async_fifo
         bin2gray(wr_ptr_bin_next);
 
     assign full =
-        (wr_ptr_gray_next ==
+        (wr_ptr_gray ==
         {
-            ~rd_ptr_gray_sync2[ADDR_WIDTH:ADDR_WIDTH-1],
+            ~rd_ptr_gray_sync2[ADDR_WIDTH : ADDR_WIDTH-1],
              rd_ptr_gray_sync2[ADDR_WIDTH-2:0]
         });
 
