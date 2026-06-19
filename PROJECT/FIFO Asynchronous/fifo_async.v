@@ -105,7 +105,7 @@ module async_fifo
     wire [ADDR_WIDTH:0] wr_ptr_gray_next;
 
     assign wr_ptr_bin_next =
-        wr_ptr_bin + ((wr_en && !full) ? 1'b1 : 1'b0);
+        wr_ptr_bin + (wr_en ? 1'b1 : 1'b0);
 
     assign wr_ptr_gray_next =
         bin2gray(wr_ptr_bin_next);
