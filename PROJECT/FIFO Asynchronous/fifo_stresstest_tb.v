@@ -119,6 +119,74 @@ module fifo_stresstest_tb;
     #1;
     $display("empty=%0d full=%0d", empty, full);
 
+
+    // Alternate Write / Read Test
+
+    $display("\n---- WRITE READ ALTERNATE TEST ----");
+
+    // Write 11
+    @(posedge clk_wr);
+    wr_en   = 1;
+    data_in = 8'h11;
+
+    @(posedge clk_wr);
+    wr_en = 0;
+
+    repeat (3) @(posedge clk_rd);
+
+    @(posedge clk_rd);
+    rd_en = 1;
+
+    @(posedge clk_rd);
+    #1;
+    $display("DATA=%h", data_out);
+
+    rd_en = 0;
+
+
+    // Write 22
+    @(posedge clk_wr);
+    wr_en   = 1;
+    data_in = 8'h22;
+
+    @(posedge clk_wr);
+    wr_en = 0;
+
+    repeat (3) @(posedge clk_rd);
+
+    @(posedge clk_rd);
+    rd_en = 1;
+
+    @(posedge clk_rd);
+    #1;
+    $display("DATA=%h", data_out);
+
+    rd_en = 0;
+
+
+    // Write 33
+    @(posedge clk_wr);
+    wr_en   = 1;
+    data_in = 8'h33;
+
+    @(posedge clk_wr);
+    wr_en = 0;
+
+    repeat (3) @(posedge clk_rd);
+
+    @(posedge clk_rd);
+    rd_en = 1;
+
+    @(posedge clk_rd);
+    #1;
+    $display("DATA=%h", data_out);
+
+    rd_en = 0;
+
+    repeat (4) @(posedge clk_rd);
+
+    $display("FULL=%0d EMPTY=%0d", full, empty);
+
     // Finish
 
     #10;
@@ -142,17 +210,17 @@ module fifo_stresstest_tb;
 
     repeat (4) @(posedge clk_wr);
 
-    /*
-$display("wr_bin   = %b", dut.wr_ptr_bin);        // Use to know the pointer values.
-$display("wr_gray  = %b", dut.wr_ptr_gray);
-$display("rd_sync  = %b", dut.rd_ptr_gray_sync2);
+	/*
+	$display("wr_bin   = %b", dut.wr_ptr_bin);        // Use to know the pointer values.
+	$display("wr_gray  = %b", dut.wr_ptr_gray);
+	$display("rd_sync  = %b", dut.rd_ptr_gray_sync2);
 
-$display("expected = %b",
-{
-    ~dut.rd_ptr_gray_sync2[4:3],
-     dut.rd_ptr_gray_sync2[2:0]
-});
-*/
+	$display("expected = %b",
+	{
+	    ~dut.rd_ptr_gray_sync2[4:3],
+	     dut.rd_ptr_gray_sync2[2:0]
+	});
+	*/
 
     $display("FULL=%0d EMPTY=%0d", full, empty);
 
