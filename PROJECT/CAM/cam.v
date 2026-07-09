@@ -1,0 +1,101 @@
+`timescale 1ns/1ps
+
+module cam #(
+    parameter DATA_WIDTH = 8,
+    parameter DEPTH      = 16,
+    parameter ADDR_WIDTH = 4
+)(
+    input                       clk,
+    input                       rst_n,
+
+    input                       wr_en,
+    input  [ADDR_WIDTH-1:0]     wr_addr,
+    input  [DATA_WIDTH-1:0]     wr_data,
+
+    input                       del_en,
+    input  [ADDR_WIDTH-1:0]     del_addr,
+
+    input                       search_en,
+    input  [DATA_WIDTH-1:0]     search_data,
+
+    output reg                  match,
+    output reg [ADDR_WIDTH-1:0] match_addr,
+    output reg                  multiple_match
+);
+
+    reg [DATA_WIDTH-1:0] cam_mem [0:DEPTH-1];
+    reg                  valid   [0:DEPTH-1];
+
+    integer wr_i;
+    integer sr_i;
+
+    reg                  match_next;
+    reg [ADDR_WIDTH-1:0] match_addr_next;
+    reg                  multiple_match_next;
+
+    reg                  first_match_found;
+
+    
+
+    always @(posedge clk) begin		// Sequential Logic
+
+        if (!rst_n) begin
+
+            for (wr_i = 0; wr_i < DEPTH; wr_i = wr_i + 1)
+                valid[wr_i] <= 1'b0;
+
+            match          <= 1'b0;
+            match_addr     <= {ADDR_WIDTH{1'b0}};
+            multiple_match <= 1'b0;
+
+        end
+        else begin
+
+            if (wr_en) begin
+                cam_mem[wr_addr] <= wr_data;
+                valid[wr_addr]   <= 1'b1;
+            end
+
+            if (del_en) begin
+                valid[del_addr] <= 1'b0;
+            end
+
+            if (search_en) begin
+                match          <= match_next;
+                match_addr     <= match_addr_next;
+                multiple_match <= multiple_match_next;
+            end
+        end
+    end
+
+   
+    always @(*) begin		 //Search Logic
+
+        match_next          = 1'b0;
+        match_addr_next     = {ADDR_WIDTH{1'b0}};
+        multiple_match_next = 1'b0;
+
+        first_match_found   = 1'b0;
+	if (search_en) begin 
+        for (sr_i = 0; sr_i < DEPTH; sr_i = sr_i + 1) begin
+
+            if ( valid[sr_i] &&
+                 (cam_mem[sr_i] == search_data) ) begin
+
+                if (!first_match_found) begin
+
+                    match_next        = 1'b1;
+                    match_addr_next   = sr_i[ADDR_WIDTH-1:0];
+                    first_match_found = 1'b1;
+
+                end
+                else begin
+
+                    multiple_match_next = 1'b1;
+                end
+            end
+        end
+	end
+    end
+
+endmodule
