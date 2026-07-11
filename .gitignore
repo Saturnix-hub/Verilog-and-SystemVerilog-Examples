@@ -20,7 +20,7 @@ transcript
 *.log
 
 # My reference code
-.ref
+*.ref
 
 tcl_stacktrace.txt
 
