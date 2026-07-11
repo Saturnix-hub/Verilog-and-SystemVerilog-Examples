@@ -18,6 +18,10 @@ transcript
 
 # Logs
 *.log
+
+# My reference code
+.ref
+
 tcl_stacktrace.txt
 
 # Windows
